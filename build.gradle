@@ -1,0 +1,18 @@
+apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'application'
+
+
+description = 'Tool for building all possible workflows from all available processor and parameter combinations.'
+    group = 'edu.kit.ocrd'
+
+mainClassName = 'edu.kit.ocrd.TestWorkflows.Main'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'commons-io:commons-io:2.6'
+    testImplementation 'junit:junit:4.12'
+}

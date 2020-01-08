@@ -1,0 +1,87 @@
+########################################################################
+# Configuration file defining OCR-D workflow.
+########################################################################
+# Each line contains one call of a module project.
+# The parameters are separated by '|'.
+# If a parameter consists of a list the values are separated by ','
+########################################################################
+# Dockerization
+########################################################################
+# If the workflow will be executed inside a docker container all local files
+# have to be located in a subdirectory of /path/to/docker/dockerfiles/workspace.
+# Afterwards all paths have to be replaced by '/data/workspace'.
+# E.g.: file:///path/to/docker/dockerfiles/workspace/workspace1 --> file:///data/workspace/workspace1
+########################################################################
+# Description of the parameters:
+########################################################################
+# 1. command - command to be executed
+# 2. input-file-grp - File group(s) used as input.
+# 3. output-file-grp - File group(s) used as output.
+# 4. group-id -  The mets:div[@TYPE='page']/@ID that contains the pointers to files representing a page. Effectively, only those files in the input file group that are referenced in these mets:div[@TYPE=\"page\"] will be processed.
+# 5. parameter - URL of parameter file in JSON format.
+# 6. log-level - Set the global maximum verbosity level. More verbose log entries will be ignored. (One of OFF, ERROR, WARN, INFO (default), DEBUG, TRACE).
+########################################################################
+# Example:
+# ocrd-kraken-binarize|OCR-D-IMG|OCR-D-IMG-BIN-KRAKEN| |https://host/ocr-kraken-binarize-params.json|ERROR
+########################################################################
+
+### Examples from workflow configuration of Robert
+### OCR-D-IMG
+ocrd-anybaseocr-crop|OCR-D-IMG|OCR-D-IMG-CROP| | |ERROR
+ocrd-olena-binarize|OCR-D-IMG|OCR-D-IMG-BIN| |{\"impl\":\"sauvola-ms-split\"} |ERROR
+ocrd-olena-binarize|OCR-D-IMG|OCR-D-IMG-BIN| |{\"impl\":\"wolf\"} |ERROR
+ocrd-cis-ocropy-binarize|OCR-D-IMG|OCR-D-IMG-BIN| | |ERROR
+### OCR-D-IMG-CROP
+ocrd-olena-binarize|OCR-D-IMG-CROP|OCR-D-IMG-BIN| |{\"impl\":\"sauvola-ms-split\"} |ERROR
+### OCR-D-IMG-BIN
+ocrd-cis-ocropy-denoise|OCR-D-IMG-BIN|OCR-D-IMG-DENOISE| |{\"level-of-operation\":\"page\",\"noise_maxsize\":3.0} |ERROR
+ocrd-cis-ocropy-clip|OCR-D-IMG-BIN|OCR-D-IMG-BIN-CLIP| | | ERROR
+ocrd-cis-ocropy-deskew|OCR-D-IMG-BIN|OCR-D-IMG-DESKEW| |{\"level-of-operation\":\"page\",\"maxskew\":5}|Error
+ocrd-tesserocr-segment-region|OCR-D-IMG-BIN|OCR-D-SEG-BLOCK| | |ERROR
+### OCR-D-IMG-DENOISE
+ocrd-cis-ocropy-deskew|OCR-D-IMG-DENOISE|OCR-D-IMG-DESKEW| |{\"level-of-operation\":\"page\",\"maxskew\":5}|Error
+ocrd-cis-ocropy-clip|OCR-D-IMG-DENOISE|OCR-D-IMG-BIN-CLIP| | | ERROR
+### OCR-D-IMG-DESKEW
+ocrd-tesserocr-segment-region|OCR-D-IMG-DESKEW|OCR-D-SEG-BLOCK| |{\"operation_level\":\"region\"}|ERROR
+ocrd-cis-ocropy-clip|OCR-D-IMG-DESKEW|OCR-D-IMG-BIN-CLIP| | | ERROR
+### OCR-D-IMG-BIN-CLIP
+ocrd-cis-ocropy-resegment|OCR-D-IMG-BIN-CLIP|OCR-D-SEG-LINE | | |ERROR
+ocrd-tesserocr-deskew|OCR-D-IMG-BIN-CLIP|OCR-D-SEG-LINE-DESKEW | |{\"operation_level\":\"region\"} | ERROR
+ocrd-tesserocr-deskew|OCR-D-IMG-BIN-CLIP|OCR-D-SEG-LINE-DESKEW | |{\"operation_level\":\"region\",\"min_orientation_confidence\":1.5} | ERROR
+ocrd-cis-ocropy-segment|OCR-D-IMG-BIN-CLIP|OCR-D-SEG-LINE| |{\"spread\":2.4} | ERROR
+### OCR-D-SEG-BLOCK
+ocrd-cis-ocropy-clip|OCR-D-SEG-BLOCK|OCR-D-SEG-BLOCK-CLIP| | | ERROR
+ocrd-tesserocr-segment-line|OCR-D-SEG-BLOCK|OCR-D-SEG-LINE| | |ERROR
+### OCR-D-SEG-BLOCK-CLIP
+ocrd-cis-ocropy-segment|OCR-D-SEG-BLOCK-CLIP|OCR-D-SEG-LINE| |{\"spread\":2.4} | ERROR
+### OCR-D-SEG-LINE
+ocrd-segment-repair|OCR-D-SEG-LINE|OCR-D-SEG-LINE-REPAIR| |{\"sanitize\":true} | ERROR
+ocrd-cis-ocropy-dewarp|OCR-D-SEG-LINE|OCR-D-SEG-LINE-DEWARP| | | ERROR
+### OCR-D-SEG-LINE-REPAIR
+ocrd-cis-ocropy-dewarp|OCR-D-SEG-LINE-REPAIR|OCR-D-SEG-LINE-DEWARP| | | ERROR
+### OCR-D-SEG-LINE-DESKEW
+ocrd-cis-ocropy-dewarp|OCR-D-SEG-LINE-DESKEW|OCR-D-SEG-LINE-DEWARP| | | ERROR
+ocrd-cis-ocropy-resegment|OCR-D-SEG-LINE-DESKEW|OCR-D-SEG-LINE-RESEG | | ERROR
+### OCR-D-SEG-LINE-RESEG
+ocrd-cis-ocropy-dewarp|OCR-D-SEG-LINE-RESEG|OCR-D-SEG-LINE-DEWARP| | | ERROR
+### OCR-D-SEG-LINE-DEWARP
+### OCROPY MODEL 'fraktur' & 'fraktur-jze'
+ocrd-cis-ocropy-recognize|OCR-D-SEG-LINE-DEWARP|OCR-D-OCR| |{\"textequiv_level\":\"glyph\",\"model\":\"fraktur.pyrnn\"} | ERROR
+ocrd-cis-ocropy-recognize|OCR-D-SEG-LINE-DEWARP|OCR-D-OCR| |{\"textequiv_level\":\"glyph\",\"model\":\"fraktur-jze.pyrnn\"} | ERROR
+ocrd-cis-ocropy-recognize|OCR-D-SEG-LINE|OCR-D-OCR| |{\"textequiv_level\":\"glyph\",\"model\":\"fraktur.pyrnn\"} | ERROR
+ocrd-cis-ocropy-recognize|OCR-D-SEG-LINE|OCR-D-OCR| |{\"textequiv_level\":\"glyph\",\"model\":\"fraktur-jze.pyrnn\"} | ERROR
+#### CALAMARI MODEL 'Fraktur', 'Latin', 'frk', 'deu', 'GT4Hist....'
+ocrd-calamari-recognize|OCR-D-SEG-LINE-DEWARP|OCR-D-OCR| |{\"textequiv_level\":\"glyph\",\"overwrite_words\":true,\"model\":\"script/Fraktur\"} | ERROR
+ocrd-calamari-recognize|OCR-D-SEG-LINE-DEWARP|OCR-D-OCR| |{\"textequiv_level\":\"glyph\",\"overwrite_words\":true,\"model\":\"script/Fraktur+script/Latin\"} | ERROR
+ocrd-calamari-recognize|OCR-D-SEG-LINE-DEWARP|OCR-D-OCR| |{\"textequiv_level\":\"glyph\",\"overwrite_words\":true,\"model\":\"frk\"} | ERROR
+ocrd-calamari-recognize|OCR-D-SEG-LINE-DEWARP|OCR-D-OCR| |{\"textequiv_level\":\"glyph\",\"overwrite_words\":true,\"model\":\"frk+deu\"} | ERROR
+ocrd-calamari-recognize|OCR-D-SEG-LINE-DEWARP|OCR-D-OCR| |{\"textequiv_level\":\"glyph\",\"overwrite_words\":true,\"model\":\"GT4HistOCR_2000000+GT4HistOCR_300000+GT4HistOCR_100000\"} | ERROR
+ocrd-calamari-recognize|OCR-D-SEG-LINE-DEWARP|OCR-D-OCR| |{\"checkpoint\":\"$(VIRTUAL_ENV)/share/calamari/GT4HistOCR/*.ckpt.json\"} | ERROR
+ocrd-calamari-recognize|OCR-D-SEG-LINE|OCR-D-OCR| |{\"textequiv_level\":\"glyph\",\"overwrite_words\":true,\"model\":\"script/Fraktur\"} | ERROR
+ocrd-calamari-recognize|OCR-D-SEG-LINE|OCR-D-OCR| |{\"textequiv_level\":\"glyph\",\"overwrite_words\":true,\"model\":\"script/Fraktur+script/Latin\"} | ERROR
+ocrd-calamari-recognize|OCR-D-SEG-LINE|OCR-D-OCR| |{\"textequiv_level\":\"glyph\",\"overwrite_words\":true,\"model\":\"frk\"} | ERROR
+ocrd-calamari-recognize|OCR-D-SEG-LINE|OCR-D-OCR| |{\"textequiv_level\":\"glyph\",\"overwrite_words\":true,\"model\":\"frk+deu\"} | ERROR
+ocrd-calamari-recognize|OCR-D-SEG-LINE|OCR-D-OCR| |{\"textequiv_level\":\"glyph\",\"overwrite_words\":true,\"model\":\"GT4HistOCR_2000000+GT4HistOCR_300000+GT4HistOCR_100000\"} | ERROR
+ocrd-calamari-recognize|OCR-D-SEG-LINE|OCR-D-OCR| |{\"checkpoint\":\"$(VIRTUAL_ENV)/share/calamari/GT4HistOCR/*.ckpt.json\"} | ERROR
+ocrd-dinglehopper | OCR-D-OCR, OCR-D-GT-SEG-PAGE | OCR-D-OCR-EVAL| | | 
+
