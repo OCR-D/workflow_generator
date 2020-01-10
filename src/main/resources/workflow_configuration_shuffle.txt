@@ -28,11 +28,11 @@
 ### Examples from workflow configuration of Robert
 ### OCR-D-IMG
 ocrd-anybaseocr-crop|OCR-D-IMG|OCR-D-IMG-CROP| | |ERROR
-ocrd-olena-binarize|OCR-D-IMG|OCR-D-IMG-BIN| |{\"impl\":\"sauvola-ms-split\"} |ERROR
-ocrd-olena-binarize|OCR-D-IMG|OCR-D-IMG-BIN| |{\"impl\":\"wolf\"} |ERROR
-ocrd-cis-ocropy-binarize|OCR-D-IMG|OCR-D-IMG-BIN| | |ERROR
+ocrd-olena-binarize|OCR-D-IMG|OCR-D-IMG-BIN,OCR-D-IMG-ALTERNATE| |{\"impl\":\"sauvola-ms-split\"} |ERROR
+ocrd-olena-binarize|OCR-D-IMG|OCR-D-IMG-BIN,OCR-D-IMG-ALTERNATE| |{\"impl\":\"wolf\"} |ERROR
+ocrd-cis-ocropy-binarize|OCR-D-IMG|OCR-D-IMG-BIN,OCR-D-IMG-ALTERNATE| | |ERROR
 ### OCR-D-IMG-CROP
-ocrd-olena-binarize|OCR-D-IMG-CROP|OCR-D-IMG-BIN| |{\"impl\":\"sauvola-ms-split\"} |ERROR
+ocrd-olena-binarize|OCR-D-IMG-CROP|OCR-D-IMG-BIN,OCR-D-IMG-ALTERNATE| |{\"impl\":\"sauvola-ms-split\"} |ERROR
 ### OCR-D-IMG-BIN
 ocrd-cis-ocropy-denoise|OCR-D-IMG-BIN|OCR-D-IMG-DENOISE| |{\"level-of-operation\":\"page\",\"noise_maxsize\":3.0} |ERROR
 ocrd-cis-ocropy-clip|OCR-D-IMG-BIN|OCR-D-IMG-BIN-CLIP| | | ERROR
@@ -61,7 +61,7 @@ ocrd-cis-ocropy-dewarp|OCR-D-SEG-LINE|OCR-D-SEG-LINE-DEWARP| | | ERROR
 ocrd-cis-ocropy-dewarp|OCR-D-SEG-LINE-REPAIR|OCR-D-SEG-LINE-DEWARP| | | ERROR
 ### OCR-D-SEG-LINE-DESKEW
 ocrd-cis-ocropy-dewarp|OCR-D-SEG-LINE-DESKEW|OCR-D-SEG-LINE-DEWARP| | | ERROR
-ocrd-cis-ocropy-resegment|OCR-D-SEG-LINE-DESKEW|OCR-D-SEG-LINE-RESEG | | ERROR
+ocrd-cis-ocropy-resegment|OCR-D-SEG-LINE-DESKEW|OCR-D-SEG-LINE-RESEG | | | ERROR
 ### OCR-D-SEG-LINE-RESEG
 ocrd-cis-ocropy-dewarp|OCR-D-SEG-LINE-RESEG|OCR-D-SEG-LINE-DEWARP| | | ERROR
 ### OCR-D-SEG-LINE-DEWARP
