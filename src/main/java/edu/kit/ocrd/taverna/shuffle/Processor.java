@@ -140,9 +140,7 @@ public class Processor {
   public static Processor parseOneLineOfWorkflowConfiguration(String line) {
     Processor returnValue = null;
     if (!line.startsWith("#")) {
-      System.out.println(line);
       String[] split = line.split("\\|");
-      System.out.println("0- '" + split[0] + "'");
       if (split.length == 6) {
         returnValue = new Processor();
         returnValue.setProcessor(split[0]);
