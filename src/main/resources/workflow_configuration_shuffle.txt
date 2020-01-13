@@ -36,10 +36,10 @@ ocrd-olena-binarize | OCR-D-IMG-CROP | OCR-D-IMG-BIN,OCR-D-IMG-ALTERNATE |  | {\
 ### OCR-D-IMG-BIN
 ocrd-cis-ocropy-denoise | OCR-D-IMG-BIN | OCR-D-IMG-DENOISE |  | {\"level-of-operation\":\"page\",\"noise_maxsize\":3.0}  | ERROR
 ocrd-cis-ocropy-clip | OCR-D-IMG-BIN | OCR-D-IMG-BIN-CLIP |  |   |  ERROR
-ocrd-cis-ocropy-deskew | OCR-D-IMG-BIN | OCR-D-IMG-DESKEW |  | {\"level-of-operation\":\"page\",\"maxskew\":5} | Error
+ocrd-cis-ocropy-deskew | OCR-D-IMG-BIN | OCR-D-IMG-DESKEW |  | {\"level-of-operation\":\"page\",\"maxskew\":5} | ERROR
 ocrd-tesserocr-segment-region | OCR-D-IMG-BIN | OCR-D-SEG-BLOCK |  |   | ERROR
 ### OCR-D-IMG-DENOISE
-ocrd-cis-ocropy-deskew | OCR-D-IMG-DENOISE | OCR-D-IMG-DESKEW |  | {\"level-of-operation\":\"page\",\"maxskew\":5} | Error
+ocrd-cis-ocropy-deskew | OCR-D-IMG-DENOISE | OCR-D-IMG-DESKEW |  | {\"level-of-operation\":\"page\",\"maxskew\":5} | ERROR
 ocrd-cis-ocropy-clip | OCR-D-IMG-DENOISE | OCR-D-IMG-BIN-CLIP |  |   |  ERROR
 ### OCR-D-IMG-DESKEW
 ocrd-tesserocr-segment-region | OCR-D-IMG-DESKEW | OCR-D-SEG-BLOCK |  | {\"operation_level\":\"region\"} | ERROR
