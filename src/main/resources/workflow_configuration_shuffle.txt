@@ -42,7 +42,7 @@ ocrd-tesserocr-segment-region | OCR-D-IMG-BIN | OCR-D-SEG-BLOCK |  |   | ERROR
 ocrd-cis-ocropy-deskew | OCR-D-IMG-DENOISE | OCR-D-IMG-DESKEW |  | {\"level-of-operation\":\"page\",\"maxskew\":5} | ERROR
 ocrd-cis-ocropy-clip | OCR-D-IMG-DENOISE | OCR-D-IMG-BIN-CLIP |  |   |  ERROR
 ### OCR-D-IMG-DESKEW
-ocrd-tesserocr-segment-region | OCR-D-IMG-DESKEW | OCR-D-SEG-BLOCK |  | {\"operation_level\":\"region\"} | ERROR
+ocrd-tesserocr-segment-region | OCR-D-IMG-DESKEW | OCR-D-SEG-BLOCK |  | | ERROR
 ocrd-cis-ocropy-clip | OCR-D-IMG-DESKEW | OCR-D-IMG-BIN-CLIP |  |   |  ERROR
 ### OCR-D-IMG-BIN-CLIP
 ocrd-cis-ocropy-resegment | OCR-D-IMG-BIN-CLIP | OCR-D-SEG-LINE |  |   | ERROR
