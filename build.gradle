@@ -1,19 +1,58 @@
+buildscript {
+  repositories { 
+    mavenLocal() 
+    jcenter()
+    mavenCentral()
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE")
+  }
+}
+
+plugins { 
+  id "io.spring.dependency-management" version "1.0.4.RELEASE" 
+  id "com.github.kt3k.coveralls" version "2.8.1" 
+}
+
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'application'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'maven-publish'
 
 
 description = 'Tool for building all possible workflows from all available processor and parameter combinations.'
-    group = 'edu.kit.ocrd'
+group = 'edu.kit.ocrd'
 
-mainClassName = 'edu.kit.ocrd.TestWorkflows.Main'
+mainClassName = 'edu.kit.ocrd.evaluation.WorkflowTool'
 
 repositories {
-    jcenter()
+  mavenLocal() 
+  jcenter()
+  mavenCentral()
+  maven {
+    url "./localRepo"
+  }
 }
 
 dependencies {
-    implementation 'commons-io:commons-io:2.6'
-    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
-    testImplementation 'junit:junit:4.12'
+  // Local dependencies
+  implementation "org.fzk.ipe:Tools:1.6"
+  implementation 'edu.kit.ocrd:ocrd-metadata:0.4.0'
+  implementation "jaxen:jaxen:1.1.6"
+  implementation "org.jdom:jdom:1.1"
+
+  implementation 'commons-io:commons-io:2.6'
+  implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+  testImplementation 'junit:junit:4.12'
+}
+
+jar {
+  manifest {
+    attributes "Main-Class": "edu.kit.ocrd.evaluation.WorkflowTool"
+  }
+ 
+  from {
+    configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+  }
 }

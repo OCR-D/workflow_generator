@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.kit.ocrd.taverna.shuffle;
+package edu.kit.ocrd.evaluation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class Processor {
     List<String> list = new ArrayList<>();
     String[] split = commaSeparatedString.split(",");
     for (String item : split) {
-      list.add(item);
+      list.add(item.trim());
     }
     return list;
   }
@@ -100,7 +100,7 @@ public class Processor {
    * @param processor the processor to set
    */
   public void setProcessor(String processor) {
-    this.processor = processor;
+    this.processor = processor.trim();
   }
 
   /**
@@ -114,7 +114,7 @@ public class Processor {
    * @param parameter the parameter to set
    */
   public void setParameter(String parameter) {
-    this.parameter = parameter;
+    this.parameter = parameter.trim();
   }
 
   /**
@@ -128,7 +128,7 @@ public class Processor {
    * @param errorLevel the errorLevel to set
    */
   public void setErrorLevel(String errorLevel) {
-    this.errorLevel = errorLevel;
+    this.errorLevel = errorLevel.trim().toUpperCase();
   }
 
   /**
@@ -144,9 +144,9 @@ public class Processor {
       if (split.length == 6) {
         returnValue = new Processor();
         returnValue.setProcessor(split[0]);
-        returnValue.parseInputFileGrp(split[1].trim());
-        returnValue.parseOutputFileGrp(split[2].trim());
-        returnValue.parseGroupId(split[3].trim());
+        returnValue.parseInputFileGrp(split[1]);
+        returnValue.parseOutputFileGrp(split[2]);
+        returnValue.parseGroupId(split[3]);
         returnValue.setParameter(split[4]);
         returnValue.setErrorLevel(split[5]);
       } else {
@@ -163,21 +163,21 @@ public class Processor {
     for (String item : inputFileGrp) {
       buffer.append(comma);
       comma = ",";
-      buffer.append(item);
+      buffer.append(item.trim());
     }
     buffer.append(" | ");
     comma = "";
     for (String item : outputFileGrp) {
       buffer.append(comma);
       comma = ",";
-      buffer.append(item);
+      buffer.append(item.trim());
     }
     buffer.append(" | ");
     comma = "";
     for (String item : groupId) {
       buffer.append(comma);
       comma = ",";
-      buffer.append(item);
+      buffer.append(item.trim());
     }
     buffer.append(" | ");
     buffer.append(getParameter()).append(" | ");
