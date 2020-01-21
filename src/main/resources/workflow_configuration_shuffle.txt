@@ -27,44 +27,41 @@
 
 ### Examples from workflow configuration of Robert
 ### OCR-D-IMG
-ocrd-anybaseocr-crop | OCR-D-IMG | OCR-D-IMG-CROP |  |   | ERROR
+ocrd-anybaseocr-crop | OCR-D-IMG | OCR-D-IMG-CROP,OCR-D-IMG-CROP-IMG |  |   | ERROR
 ocrd-olena-binarize | OCR-D-IMG | OCR-D-IMG-BIN,OCR-D-IMG-ALTERNATE |  | {\"impl\":\"sauvola-ms-split\"}  | ERROR
 ocrd-olena-binarize | OCR-D-IMG | OCR-D-IMG-BIN,OCR-D-IMG-ALTERNATE |  | {\"impl\":\"wolf\"}  | ERROR
 ocrd-cis-ocropy-binarize | OCR-D-IMG | OCR-D-IMG-BIN,OCR-D-IMG-ALTERNATE |  |   | ERROR
 ### OCR-D-IMG-CROP
 ocrd-olena-binarize | OCR-D-IMG-CROP | OCR-D-IMG-BIN,OCR-D-IMG-ALTERNATE |  | {\"impl\":\"sauvola-ms-split\"}  | ERROR
 ### OCR-D-IMG-BIN
-ocrd-cis-ocropy-denoise | OCR-D-IMG-BIN | OCR-D-IMG-DENOISE |  | {\"level-of-operation\":\"page\",\"noise_maxsize\":3.0}  | ERROR
-ocrd-cis-ocropy-clip | OCR-D-IMG-BIN | OCR-D-IMG-BIN-CLIP |  |   |  ERROR
-ocrd-cis-ocropy-deskew | OCR-D-IMG-BIN | OCR-D-IMG-DESKEW |  | {\"level-of-operation\":\"page\",\"maxskew\":5} | ERROR
+ocrd-cis-ocropy-denoise | OCR-D-IMG-BIN | OCR-D-IMG-DENOISE,OCR-D-IMG-DENOISE-IMG |  | {\"level-of-operation\":\"page\",\"noise_maxsize\":3.0}  | ERROR
+ocrd-cis-ocropy-deskew | OCR-D-IMG-BIN | OCR-D-IMG-DESKEW,OCR-D-IMG-DESKEW-IMG |  | {\"level-of-operation\":\"page\",\"maxskew\":5} | ERROR
 ocrd-tesserocr-segment-region | OCR-D-IMG-BIN | OCR-D-SEG-BLOCK |  |   | ERROR
 ### OCR-D-IMG-DENOISE
-ocrd-cis-ocropy-deskew | OCR-D-IMG-DENOISE | OCR-D-IMG-DESKEW |  | {\"level-of-operation\":\"page\",\"maxskew\":5} | ERROR
-ocrd-cis-ocropy-clip | OCR-D-IMG-DENOISE | OCR-D-IMG-BIN-CLIP |  |   |  ERROR
+ocrd-cis-ocropy-deskew | OCR-D-IMG-DENOISE | OCR-D-IMG-DESKEW,OCR-D-IMG-DESKEW-IMG |  | {\"level-of-operation\":\"page\",\"maxskew\":5} | ERROR
 ### OCR-D-IMG-DESKEW
 ocrd-tesserocr-segment-region | OCR-D-IMG-DESKEW | OCR-D-SEG-BLOCK |  | | ERROR
-ocrd-cis-ocropy-clip | OCR-D-IMG-DESKEW | OCR-D-IMG-BIN-CLIP |  |   |  ERROR
 ### OCR-D-IMG-BIN-CLIP
 ocrd-cis-ocropy-resegment | OCR-D-IMG-BIN-CLIP | OCR-D-SEG-LINE |  |   | ERROR
-ocrd-tesserocr-deskew | OCR-D-IMG-BIN-CLIP | OCR-D-SEG-LINE-DESKEW |  | {\"operation_level\":\"region\"}  |  ERROR
-ocrd-tesserocr-deskew | OCR-D-IMG-BIN-CLIP | OCR-D-SEG-LINE-DESKEW |  | {\"operation_level\":\"region\",\"min_orientation_confidence\":1.5}  |  ERROR
+ocrd-tesserocr-deskew | OCR-D-IMG-BIN-CLIP | OCR-D-SEG-LINE-DESKEW,OCR-D-SEG-LINE-DESKEW-IMG |  | {\"operation_level\":\"region\"}  |  ERROR
+ocrd-tesserocr-deskew | OCR-D-IMG-BIN-CLIP | OCR-D-SEG-LINE-DESKEW,OCR-D-SEG-LINE-DESKEW-IMG |  | {\"operation_level\":\"region\",\"min_orientation_confidence\":1.5}  |  ERROR
 ocrd-cis-ocropy-segment | OCR-D-IMG-BIN-CLIP | OCR-D-SEG-LINE |  | {\"spread\":2.4}  |  ERROR
 ### OCR-D-SEG-BLOCK
-ocrd-cis-ocropy-clip | OCR-D-SEG-BLOCK | OCR-D-SEG-BLOCK-CLIP |  |   |  ERROR
+ocrd-cis-ocropy-clip | OCR-D-SEG-BLOCK | OCR-D-SEG-BLOCK-CLIP,OCR-D-SEG-BLOCK-CLIP-IMG |  |   |  ERROR
 ocrd-cis-ocropy-segment | OCR-D-SEG-BLOCK | OCR-D-SEG-LINE |  | {\"spread\":2.4}  |  ERROR
 ocrd-tesserocr-segment-line | OCR-D-SEG-BLOCK | OCR-D-SEG-LINE |  |   | ERROR
 ### OCR-D-SEG-BLOCK-CLIP
 ocrd-cis-ocropy-segment | OCR-D-SEG-BLOCK-CLIP | OCR-D-SEG-LINE |  | {\"spread\":2.4}  |  ERROR
 ### OCR-D-SEG-LINE
 ocrd-segment-repair | OCR-D-SEG-LINE | OCR-D-SEG-LINE-REPAIR |  | {\"sanitize\":true}  |  ERROR
-ocrd-cis-ocropy-dewarp | OCR-D-SEG-LINE | OCR-D-SEG-LINE-DEWARP |  |   |  ERROR
+ocrd-cis-ocropy-dewarp | OCR-D-SEG-LINE | OCR-D-SEG-LINE-DEWARP,OCR-D-SEG-LINE-DEWARP-IMG |  |   |  ERROR
 ### OCR-D-SEG-LINE-REPAIR
-ocrd-cis-ocropy-dewarp | OCR-D-SEG-LINE-REPAIR | OCR-D-SEG-LINE-DEWARP |  |   |  ERROR
+ocrd-cis-ocropy-dewarp | OCR-D-SEG-LINE-REPAIR | OCR-D-SEG-LINE-DEWARP,OCR-D-SEG-LINE-DEWARP-IMG |  |   |  ERROR
 ### OCR-D-SEG-LINE-DESKEW
-ocrd-cis-ocropy-dewarp | OCR-D-SEG-LINE-DESKEW | OCR-D-SEG-LINE-DEWARP |  |   |  ERROR
+ocrd-cis-ocropy-dewarp | OCR-D-SEG-LINE-DESKEW | OCR-D-SEG-LINE-DEWARP,OCR-D-SEG-LINE-DEWARP-IMG |  |   |  ERROR
 ocrd-cis-ocropy-resegment | OCR-D-SEG-LINE-DESKEW | OCR-D-SEG-LINE-RESEG |  |   |  ERROR
 ### OCR-D-SEG-LINE-RESEG
-ocrd-cis-ocropy-dewarp | OCR-D-SEG-LINE-RESEG | OCR-D-SEG-LINE-DEWARP |  |   |  ERROR
+ocrd-cis-ocropy-dewarp | OCR-D-SEG-LINE-RESEG | OCR-D-SEG-LINE-DEWARP,OCR-D-SEG-LINE-DEWARP-IMG |  |   |  ERROR
 ### OCR-D-SEG-LINE-DEWARP
 ### OCROPY MODEL 'fraktur' & 'fraktur-jze'
 #ocrd-cis-ocropy-recognize|OCR-D-SEG-LINE-DEWARP|OCR-D-OCR| |{\"textequiv_level\":\"glyph\",\"model\":\"fraktur.pyrnn\"} | ERROR
