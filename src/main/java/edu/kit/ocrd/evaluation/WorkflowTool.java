@@ -43,7 +43,8 @@ public class WorkflowTool {
    * @param args the command line arguments
    */
   public static void main(String[] args) {
-    String[] argsCoded = {"eval", "src/main/resources/weigel", "/tmp/eval_neu.txt"};
+    String[] argsCoded = {"eval", "/home/hartmann-v/Projekte/OCR-D/exampleData/weigel/", "/tmp/eval_weigel.txt"};
+//    String[] argsCoded = {"eval", "/home/hartmann-v/Projekte/OCR-D/exampleData/weigel/weigel_2", "/tmp/eval_nur2.txt"};
 //    String[] argsCoded = {"shuffle", "src/main/resources/workflow_configuration_shuffle.txt", "/tmp/test.txt", "100"};
     args = argsCoded;
 
@@ -128,7 +129,7 @@ public class WorkflowTool {
     System.out.println(message);
     System.out.println("Please try one of the following:");
     System.out.println("  test path/to/workflow_configuration_holding_all_possible_processors.txt [workflow_configuration_new.txt] ");
-    System.out.println("  shuffle path/to/workflow_configuration_holding_all_possible_processors.txt [workflow_configuration_new.txt] ");
+    System.out.println("  shuffle path/to/workflow_configuration_holding_all_possible_processors.txt [workflow_configuration_new.txt [max_no_of_processor_steps_per_file]] ");
     System.out.println("  eval  path/to/workspace [evaluation_results.csv] ");
   }
 
@@ -304,7 +305,6 @@ public class WorkflowTool {
   public static List<Evaluation> evaluateWorkspace(Path pathToWorkspace) throws Exception {
     List<Evaluation> evaluationResult = new ArrayList<>();
     Map<String, EvaluationProcessor> outputGroup2Processor = new HashMap<>();
-    int total = 0;
     ProvenanceUtil pu;
     // Find all provenance files
     try (Stream<Path> walk = Files.walk(pathToWorkspace)) {
@@ -317,12 +317,6 @@ public class WorkflowTool {
         Document provenanceDocument = JaxenUtil.getDocument(provenanceFile);
         // Read all processors with input and outputGroups.
         List<ProvenanceMetadata> extractWorkflows = ProvenanceUtil.extractWorkflows(provenanceDocument, null, "not needed");
-        int before = outputGroup2Processor.size();
-        int found = extractWorkflows.size();
-        System.out.println("Found Processors: " + found);
-        System.out.println("Size before: " + before);
-        total += found;
-        int failed = 0;
         for (ProvenanceMetadata item : extractWorkflows) {
 //      Evaluation eval = new Evaluation();
 //      eval.set
@@ -333,12 +327,12 @@ public class WorkflowTool {
           // As all Strings starts with '[' first string will be empty.
           processor.setInputGroup(item.getInputFileGrps().split("[\\[, \\]]+")[1].trim());
           if (item.getOutputFileGrps().length() > 3) {
-            outputGroup2Processor.put(item.getOutputFileGrps().split("[\\[, \\]]+")[1].trim(), processor);
-          } else 
-            failed++;
+            String[] allOutputGroups = item.getOutputFileGrps().split("[\\[, \\]]+");
+            for (String group : allOutputGroups) {
+              outputGroup2Processor.put(group, processor);
+            }
+          } 
         }
-        System.out.println("Size before/failed/after/diff: " + before + "/" + failed + "/" + outputGroup2Processor.size() + "/" + (before + found - failed - outputGroup2Processor.size()));
-        System.out.println("Total: " + total);
       }
 
     } catch (IOException e) {
