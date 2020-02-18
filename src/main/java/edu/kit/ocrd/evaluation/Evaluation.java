@@ -138,6 +138,8 @@ public class Evaluation {
     csvHeader.append("No of Characters");
     csvHeader.append(fieldSeparator);
     csvHeader.append("No of Words");
+    csvHeader.append(fieldSeparator);
+    csvHeader.append("No of Errors");
     csvHeader.append("\n");
 
     allLines.add(csvHeader.toString());
@@ -170,6 +172,8 @@ public class Evaluation {
       line.append(getNoOfCharacters());
       line.append(fieldSeparator);
       line.append(getNoOfWords());
+      line.append(fieldSeparator);
+      line.append((int)(getNoOfCharacters() * getCer()));
       line.append("\n");
 
       allLines.add(line.toString());

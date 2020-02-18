@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.fzk.tools.xml.JaxenUtil;
 import org.jdom.Document;
+import org.jdom.Namespace;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -39,15 +40,24 @@ public class WorkflowTool {
 
   static HashMap<String, Integer> counterForOutputGroups = new HashMap<>();
 
+  static HashMap<String, Integer> noOfCharactersPerPage = new HashMap<>();
+
   /**
    * @param args the command line arguments
    */
   public static void main(String[] args) {
-    String[] argsCoded = {"eval", "/home/hartmann-v/Projekte/OCR-D/exampleData/weigel/", "/tmp/eval_weigel.txt"};
-//    String[] argsCoded = {"eval", "/home/hartmann-v/Projekte/OCR-D/exampleData/weigel/weigel_2", "/tmp/eval_nur2.txt"};
-//    String[] argsCoded = {"shuffle", "src/main/resources/workflow_configuration_shuffle.txt", "/tmp/test.txt", "100"};
-    args = argsCoded;
-
+    String[][] argsCoded = {/*0*/{"eval", "/media/hartmann-v/Volume/OCR-D/workspace/", "/media/hartmann-v/Volume/OCR-D/workspace/eval_weigel.txt"},
+      /*1*/ {"listProv", "/home/hartmann-v/ocrd/taverna/workspace/weigel/", "/tmp/eval_weigel.txt"},
+      /*2*/ {"eval", "/home/hartmann-v/Projekte/OCR-D/exampleData/weigel/weigel_2", "/tmp/eval_nur2.txt"},
+      /*3*/ {"permutate", "src/main/resources/workflow_configuration4permutation.txt", "/tmp/workflow_configuration_permutation.txt", "350"},
+      /*4*/ {"test", "src/main/resources/workflow_configuration4permutation.txt", "/tmp/workflow_configuration_test.txt"},
+      /*5*/ {"eval", "/home/hartmann-v/ocrd/taverna/workspace/weigel", "/tmp/eval_weigel.txt"},
+      /*6*/ {"listProv", "/media/hartmann-v/Volume/OCR-D/workspace", "/tmp/eval_weigel.txt"}};
+//               argsCoded = ;
+//    String[] argsCoded = ;
+    //String[] argsCoded = ;
+    // 0, 3, 6
+    args = argsCoded[3];
     if (args.length == 0) {
       printUsage("Missing parameters!");
       System.exit(1);
@@ -71,7 +81,7 @@ public class WorkflowTool {
         }
         createTestWorkflow(pathForTemplate, pathForResult, maxNoOfProcessorSteps);
         break;
-      case "shuffle":
+      case "permutate":
         switch (args.length) {
           case 4:
             maxNoOfProcessorSteps = Integer.parseInt(args[3]);
@@ -84,7 +94,7 @@ public class WorkflowTool {
             printUsage("Wrong number of parameters!");
             System.exit(1);
         }
-        shuffleAllProcessors(pathForTemplate, pathForResult, maxNoOfProcessorSteps);
+        WorkflowTool.permutateAllProcessors(pathForTemplate, pathForResult, maxNoOfProcessorSteps);
         break;
       case "eval":
         switch (args.length) {
@@ -99,38 +109,44 @@ public class WorkflowTool {
         }
         evaluateWorkspace(pathForTemplate, pathForResult);
         break;
+      case "listProv":
+        switch (args.length) {
+          case 3:
+            pathForResult = Paths.get(args[2]);
+          case 2:
+            pathForTemplate = Paths.get(args[1]);
+            break;
+          default:
+            printUsage("Wrong number of parameters!");
+            System.exit(1);
+        }
+        evaluateWorkflows(pathForTemplate, pathForResult);
+        break;
+      case "wc":
+        switch (args.length) {
+          case 2:
+            pathForTemplate = Paths.get(args[1]);
+            break;
+          default:
+            printUsage("Wrong number of parameters!");
+            System.exit(1);
+        }
+        determineNoOfCharacters(pathForTemplate);
+        break;
       default:
         printUsage("Wrong parameter!");
         System.exit(1);
-    } // Erzeuge eine workflow_configuration aus allen in einer workflow_configuration_allProcessors.txt aufgeführten
-    // Prozessoren und Parameter -Kombinationen.
-    // Beginne mit INPUTGROUP OCR-D-IMG 
-    // Ende mit OUTPUTGROUP OCR-D-RESULT
-    //    Path get = Paths.get("/home/hartmann-v/Projekte/OCR-D/workflow_generator/src/main/resources/workflow_configuration_shuffle.txt");
-    //    Path eval = Paths.get("/home/hartmann-v/Projekte/OCR-D/workflow_generator/src/main/resources/OCR-D-EVAL_0003.json");
-    //    Path test = Paths.get("/home/hartmann-v/Projekte/OCR-D/workflow_generator/src/main/resources/workflow_configuration_test.txt");
-    //    Path all = Paths.get("/home/hartmann-v/Projekte/OCR-D/workflow_generator/src/main/resources/workflow_configuration_all.txt");
-    //    
-    //    List<Processor> allProcessors = shuffleAllProcessors(get);
-    //    writeConfigFile("File for testing all possible workflows.", allProcessors, all);
-    ////    for (Processor item : allProcessors) {
-    ////      System.out.print(item.toConfigurationString());
-    ////    }
-    //    parseJsonFile(eval);
-    //    System.out.println(getIndexOfGroupId("keinIndex"));
-    //    System.out.println(getIndexOfGroupId("index_3"));
-    //    System.out.println(getIndexOfGroupId("index_0004"));
-    //    System.out.println(getIndexOfGroupId("index_wei_02"));
-    //    System.out.println(getIndexOfGroupId("_01"));
-    //    List<Processor> allProcessorsOnce = createTestWorkflow(get);
+    }
   }
 
   public static void printUsage(String message) {
     System.out.println(message);
     System.out.println("Please try one of the following:");
-    System.out.println("  test path/to/workflow_configuration_holding_all_possible_processors.txt [workflow_configuration_new.txt] ");
-    System.out.println("  shuffle path/to/workflow_configuration_holding_all_possible_processors.txt [workflow_configuration_new.txt [max_no_of_processor_steps_per_file]] ");
-    System.out.println("  eval  path/to/workspace [evaluation_results.csv] ");
+    System.out.println("  test      path/to/workflow_configuration_holding_all_possible_processors.txt [workflow_configuration_new.txt] ");
+    System.out.println("  permutate path/to/workflow_configuration_holding_all_possible_processors.txt [workflow_configuration_new.txt [max_no_of_processor_steps_per_file]] ");
+    System.out.println("  eval      path/to/workspace [evaluation_results.csv] ");
+    System.out.println("  wc        path/to/workspace");
+    System.out.println("  listProv  path/to/workspace");
   }
 
   /**
@@ -153,6 +169,38 @@ public class WorkflowTool {
     }
   }
 
+  /**
+   * Evaluate processors by parsing provenance file.
+   *
+   * Which processor produces which output file group.
+   * @param pathToWorkspace path to workspace.
+   * @param pathToResult csv file containing all results. (or STDOUT if null)
+   */
+  public static void evaluateWorkflows(Path pathToWorkspace, Path pathToResult) {
+    try {
+      String targetFile = "STDOUT";
+      if (pathToResult != null) {
+        targetFile = pathToResult.toAbsolutePath().toString();
+      }
+      System.out.println("Evaluate processors and write their input and output file groups to '" + targetFile + "'");
+      evaluateWorkflows(pathToWorkspace);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Evaluate the workspace by evaluating json files generated by dinglehopper
+   *
+   * @param pathToWorkspace
+   */
+  public static void determineNoOfCharacters(Path pathToWorkspace) {
+    String targetFile = "STDOUT";
+    System.out.println("Count no of characters per page and write results to '" + targetFile + "'");
+    collectNoOfCharactersPerPage(pathToWorkspace, "OCR-D-GT-SEG-PAGE");
+    collectNoOfCharactersPerPage(pathToWorkspace, "OCR-D-GT-SEG-BLOCK");
+  }
+
   public static void createTestWorkflow(Path pathToTemplate, Path pathToResult, int maxNoOfProcessorSteps) {
     String targetFile = "STDOUT";
     if (pathToResult != null) {
@@ -164,14 +212,14 @@ public class WorkflowTool {
     writeConfigFile("File for testing all available processor/parameter combinations.", createTestWorkflow, pathToResult, maxNoOfProcessorSteps);
   }
 
-  public static void shuffleAllProcessors(Path pathToTemplate, Path pathToResult, int maxNoOfProcessorSteps) {
+  public static void permutateAllProcessors(Path pathToTemplate, Path pathToResult, int maxNoOfProcessorSteps) {
     String targetFile = "STDOUT";
     if (pathToResult != null) {
       targetFile = pathToResult.toAbsolutePath().toString();
     }
-    System.out.println("Create all workflows and write it to '" + targetFile + "'");
+    System.out.println("Permutate all processors and write them to '" + targetFile + "'");
     System.out.println("Maximum number of processor steps per file: " + maxNoOfProcessorSteps);
-    List<Processor> createCompleteWorkflow = shuffleAllProcessors(pathToTemplate);
+    List<Processor> createCompleteWorkflow = permutateAllProcessors(pathToTemplate);
     writeConfigFile("File for testing all possible workflows.", createCompleteWorkflow, pathToResult, maxNoOfProcessorSteps);
 
   }
@@ -203,6 +251,7 @@ public class WorkflowTool {
           if (newFile) {
             if (bufferedWriter != null) {
               bufferedWriter.flush();
+              bufferedWriter.close();
             }
             if (maxNoOfProcessorSteps < processors.size()) {
               pathToFile = Paths.get(String.format("%s_%03d", configurationFile.toString(), fileIndex++));
@@ -239,6 +288,10 @@ public class WorkflowTool {
           if (!replaceProcessor) {
             actualWorkflow.add(processor);
           }
+        }
+        if (bufferedWriter != null) {
+          bufferedWriter.flush();
+          bufferedWriter.close();
         }
       } catch (IOException ex) {
         try {
@@ -294,13 +347,13 @@ public class WorkflowTool {
   }
 
   /**
-   * Create one workflow to test all available processors of given configuration
-   * file.
+   * Create a list of Evaluation results.
    *
    * Configuration file contains all processor/parameter combination which
    * should be tested. See workflow_configuration.txt
    *
    * @param pathToWorkspace config file with all processors.
+   * @return a list with all evaluation results.
    */
   public static List<Evaluation> evaluateWorkspace(Path pathToWorkspace) throws Exception {
     List<Evaluation> evaluationResult = new ArrayList<>();
@@ -318,8 +371,6 @@ public class WorkflowTool {
         // Read all processors with input and outputGroups.
         List<ProvenanceMetadata> extractWorkflows = ProvenanceUtil.extractWorkflows(provenanceDocument, null, "not needed");
         for (ProvenanceMetadata item : extractWorkflows) {
-//      Evaluation eval = new Evaluation();
-//      eval.set
           EvaluationProcessor processor = new EvaluationProcessor();
           processor.setDuration(item.getDurationProcessor());
           processor.setParameter(item.getParameterFile());
@@ -331,7 +382,7 @@ public class WorkflowTool {
             for (String group : allOutputGroups) {
               outputGroup2Processor.put(group, processor);
             }
-          } 
+          }
         }
       }
 
@@ -339,6 +390,8 @@ public class WorkflowTool {
       e.printStackTrace();
     }
 
+    // Calculate no of characters per page
+    determineNoOfCharacters(pathToWorkspace);
     // Find all json-files
     try (Stream<Path> walk = Files.walk(pathToWorkspace)) {
 
@@ -372,13 +425,86 @@ public class WorkflowTool {
   }
 
   /**
-   * Create one workflow to test all available processors of given configuration
-   * file.
+   * Evaluate all workflows.
+   * 
+   * Print all processors and its input and output file groups.
    *
-   * Configuration file contains all processor/parameter combination which
-   * should be tested. See workflow_configuration.txt
+   * @param pathToWorkspace config file with all processors.
+   * @throws java.lang.Exception
+   */
+  public static void evaluateWorkflows(Path pathToWorkspace) throws Exception {
+    // Find all provenance files
+    try (Stream<Path> walk = Files.walk(pathToWorkspace)) {
+
+      List<String> result = walk.map(x -> x.toString())
+              .filter(f -> f.endsWith("ocrd_provenance.xml")).collect(Collectors.toList());
+      for (String file : result) {
+        System.out.println("Provenance: " + file);
+        File provenanceFile = Paths.get(file).toFile();
+        Document provenanceDocument = JaxenUtil.getDocument(provenanceFile);
+        // Read all processors with input and outputGroups.
+        List<ProvenanceMetadata> extractWorkflows = ProvenanceUtil.extractWorkflows(provenanceDocument, null, "not needed");
+        System.out.println("++++++++++++++++Workflows found: " + extractWorkflows.size());
+        for (ProvenanceMetadata item : extractWorkflows) {
+          System.out.println(item.getProcessorLabel() + " - " + item.getInputFileGrps() + " -> " + item.getOutputFileGrps());
+        }
+      }
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    return;
+  }
+
+  /**
+   * Collect the number of characters for all pages and store them in local map.
+   *
+   * @param pathToWorkspace Path to (at least one) workspace (looking also in
+   * subdirectories)
+   * @param groupId GROUPID of ground truth.
+   */
+  private static void collectNoOfCharactersPerPage(Path pathToWorkspace, String groupId) {
+    System.out.println("Path: '" + pathToWorkspace.toString() + "' looking for GROUPID '" + groupId + "'");
+    Namespace page = Namespace.getNamespace("pc", "http://schema.primaresearch.org/PAGE/gts/pagecontent/2019-07-15");
+    Namespace page2018 = Namespace.getNamespace("pc2018", "http://schema.primaresearch.org/PAGE/gts/pagecontent/2018-07-15");
+    Namespace[] all = {page,page2018};
+    // Find all provenance files
+    try (Stream<Path> walk = Files.walk(pathToWorkspace)) {
+
+      List<String> result = walk.map(x -> x.toString())
+              .filter(f -> f.contains(groupId)).filter(f -> f.endsWith(".xml")).collect(Collectors.toList());
+      for (String file : result) {
+        File gtFile = Paths.get(file).toFile();
+        String fileName = gtFile.getName();
+        Document provenanceDocument = JaxenUtil.getDocument(gtFile);
+        String[] values = JaxenUtil.getValues(provenanceDocument, "//pc:TextRegion/pc:TextEquiv/pc:Unicode", all);
+        if (values.length == 0) {
+          // try with old namespace
+          values = JaxenUtil.getValues(provenanceDocument, "//pc2018:TextRegion/pc2018:TextEquiv/pc2018:Unicode", all);
+        }
+        int noOfCharacters = 0;
+        for (String text : values) {
+          noOfCharacters += text.length();
+        }
+        System.out.println("Total no of characters for file '" + fileName + "': " + noOfCharacters);
+        noOfCharactersPerPage.put(fileName, noOfCharacters);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+  }
+
+  /**
+   * Create one workflow to test all available processors of given configuration
+   * file.Configuration file contains all processor/parameter combination which
+   * should be tested.
+   *
+   * See workflow_configuration.txt
    *
    * @param configurationFile config file with all processors.
+   * @return List with all processors to be executed once.
    */
   public static List<Processor> createTestWorkflow(Path configurationFile) {
     List<Processor> parseWorkflowConfiguration = parseWorkflowConfiguration(configurationFile);
@@ -386,6 +512,12 @@ public class WorkflowTool {
     return parseWorkflowConfiguration;
   }
 
+  /**
+   * Parse json file containing CER.
+   *
+   * @param evaluationFile Json file containing results from evaluation
+   * @return Evaluation with parsed attributes.
+   */
   public static Evaluation parseJsonFile(Path evaluationFile) {
     Evaluation eval = null;
     String[] jsonFileSplit = evaluationFile.toString().split("_");
@@ -398,19 +530,20 @@ public class WorkflowTool {
 
       double wordErrorRate = (Double) jsonObject.get("wer");
       double characterErrorRate = (Double) jsonObject.get("cer");
-      String gt = ((String) jsonObject.get("gt")).split("/")[0];
-      String ocr = ((String) jsonObject.get("ocr")).split("/")[0];
-      String evalGrp;
-      if (gt.split("_").length > 1) {
-        evalGrp = gt;
-      } else {
-        evalGrp = ocr;
+      String[] gt = ((String) jsonObject.get("gt")).split("/");
+      String[] ocr = ((String) jsonObject.get("ocr")).split("/");
+      String evalGrp = ocr[0];
+      String gtFilename = gt[1];
+      if (gt[0].split("_").length > 1) {
+        evalGrp = gt[0];
+        gtFilename = ocr[1];
       }
       eval = new Evaluation();
       eval.setCer(characterErrorRate);
       eval.setWer(wordErrorRate);
       eval.setOutputGroup(evalGrp.trim());
       eval.setIndex(index);
+      eval.setNoOfCharacters(noOfCharactersPerPage.get(gtFilename));
 
     } catch (IOException | ParseException e) {
       e.printStackTrace();
@@ -419,20 +552,27 @@ public class WorkflowTool {
   }
 
   /**
-   * Shuffle all processors from given configuration file.
+   * Shuffle all processors from given configuration file. Configuration file
+   * contains all processor/parameter combination which should be tested.
    *
-   * Configuration file contains all processor/parameter combination which
-   * should be tested. See workflow_configuration.txt
+   * See workflow_configuration.txt
    *
    * @param configurationFile config file with all processors.
+   * @return List with all possible processors in correct order.
    */
-  public static List<Processor> shuffleAllProcessors(Path configurationFile) {
+  public static List<Processor> permutateAllProcessors(Path configurationFile) {
     Map<String, List<Processor>> parseWorkflowConfiguration = createMapOfWorkflowConfiguration(configurationFile);
-    List<Processor> allProcessors = shuffleProcessors(parseWorkflowConfiguration);
+    List<Processor> allProcessors = permutateProcessors(parseWorkflowConfiguration);
 
     return allProcessors;
   }
 
+  /**
+   * Map all processors dependent on its input file group.
+   *
+   * @param filePath File containing all possible processors.
+   * @return Map with all processors referenced by their input file group.
+   */
   public static Map<String, List<Processor>> createMapOfWorkflowConfiguration(Path filePath) {
     Map<String, List<Processor>> processors = new HashMap<>();
     List<Processor> parseWorkflowConfiguration = parseWorkflowConfiguration(filePath);
@@ -448,6 +588,12 @@ public class WorkflowTool {
     return processors;
   }
 
+  /**
+   * Parse workflow configuration with all processors.
+   *
+   * @param filePath Path to workflow_configuration.txt
+   * @return List with all processors defined in file.
+   */
   public static List<Processor> parseWorkflowConfiguration(Path filePath) {
     List<Processor> allProcessors = new ArrayList<>();
     if (filePath.toFile().exists()) {
@@ -465,17 +611,35 @@ public class WorkflowTool {
       } catch (IOException ex) {
         ex.printStackTrace();
       }
+    } else {
+      System.out.println("File '" + filePath.toString() + "' doesn't exist!");
     }
+    System.out.println("Found " + allProcessors.size() + " processors.");
     return allProcessors;
   }
 
-  public static List<Processor> shuffleProcessors(Map<String, List<Processor>> allTemplates) {
+  /**
+   * Permutate all processors.
+   *
+   * @param allTemplates Map with all given processors.
+   * @return List with the processors in correct order.
+   */
+  public static List<Processor> permutateProcessors(Map<String, List<Processor>> allTemplates) {
     List<Processor> processors = new ArrayList<>();
-    processors = addProcessorForInputFileGrp("OCR-D-IMG", null, allTemplates);
+    processors = addProcessorForInputFileGrp("OCR-D-IMG", allTemplates);
     return processors;
   }
 
-  public static List<Processor> addProcessorForInputFileGrp(String inputFileGroup, Integer index, Map<String, List<Processor>> allTemplates) {
+  /**
+   * Add all processors with given input file group to the list with all
+   * processors. For the output file groups of each processor itself the method
+   * is called recursive.
+   *
+   * @param inputFileGroup Input file group of processor
+   * @param allTemplates Map with all processors mapped via input file group.
+   * @return List with all processors in correct order.
+   */
+  public static List<Processor> addProcessorForInputFileGrp(String inputFileGroup, Map<String, List<Processor>> allTemplates) {
     List<Processor> allProcessors = new ArrayList<>();
     List<Processor> listOfNextProcessors = allTemplates.get(inputFileGroup);
     if (listOfNextProcessors != null) {
@@ -496,13 +660,21 @@ public class WorkflowTool {
         }
         allProcessors.add(newProcessor);
         String firstOutputFileGrp = processor.getOutputFileGrp().get(0);
-        List<Processor> processorsPart = addProcessorForInputFileGrp(firstOutputFileGrp, counterForOutputGroups.get(firstOutputFileGrp), allTemplates);
+        List<Processor> processorsPart = addProcessorForInputFileGrp(firstOutputFileGrp, allTemplates);
         allProcessors.addAll(processorsPart);
       }
     }
     return allProcessors;
   }
 
+  /**
+   * Add unique output file group to given processors. Each processor should be
+   * available only once.
+   *
+   * @param inputFileGroup Input file group of processor
+   * @param allProcessors List with all processors.
+   * @return List with all processors in correct order.
+   */
   public static void addProcessorForInputFileGrpForTest(String inputFileGroup, List<Processor> allProcessors) {
     for (Processor processor : allProcessors) {
       if (processor.getInputFileGrp().get(0).equals(inputFileGroup)) {
@@ -525,9 +697,14 @@ public class WorkflowTool {
         }
       }
     }
-    return;
   }
 
+  /**
+   * Parse current index for given file group
+   *
+   * @param fileGroup Label of the file group.
+   * @return Current index of given file group.
+   */
   public static Integer getIndexOfGroupId(String fileGroup) {
     Integer returnValue = null;
     int lastIndexOf = fileGroup.lastIndexOf("_");
@@ -537,6 +714,13 @@ public class WorkflowTool {
     return returnValue;
   }
 
+  /**
+   * Get group ID. If no index is given index won't be appended.
+   *
+   * @param groupId group ID
+   * @param index index
+   * @return groupId with index
+   */
   public static String getGroupId(String groupId, Integer index) {
     String returnValue = groupId.trim();
     if (index != null) {
@@ -545,12 +729,24 @@ public class WorkflowTool {
     return returnValue;
   }
 
+  /**
+   * Get group ID with current index for given group ID
+   *
+   * @param groupId Group ID
+   * @return Group ID with current index
+   */
   public static String getGroupId(String groupId) {
     groupId = groupId.trim();
     Integer index = counterForOutputGroups.get(groupId);
     return getGroupId(groupId, index);
   }
 
+  /**
+   * Determine next index for given group ID.
+   *
+   * @param groupId Group ID
+   * @return Group ID with new index.
+   */
   public static String getNextGroupId(String groupId) {
     groupId = groupId.trim();
     if (counterForOutputGroups.get(groupId) == null) {
