@@ -1,0 +1,310 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "edu.kit.ocrd",
+    "module": "ocrd-metadata",
+    "version": "0.4.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.4.1",
+      "buildId": "actspzbodjcrbgj3okmhzzqviu"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "ocrd-metadata-0.4.0.jar",
+          "url": "ocrd-metadata-0.4.0.jar",
+          "size": 48661,
+          "sha512": "99547088ed785d772dd1de583e9f770ec7a2f6aa6d6132b622642721f3311b26e16f341810d56e625426061d1ddae00c23dd5cd3e3f188984ed7c28ed82341b2",
+          "sha256": "c816dad377d78eda6f725c4aade9bc892b73ebee8b4e9e9c882b325c94b730da",
+          "sha1": "94e9eb58ca04ad1588325e5698f5bef746268114",
+          "md5": "b65bf47637578ca17a4db4dc01977aab"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.fzk.ipe",
+          "module": "Tools",
+          "version": {
+            "requires": "1.6"
+          },
+          "excludes": [
+            {
+              "group": "org.apache.tomcat",
+              "module": "tomcat-annotations-api"
+            },
+            {
+              "group": "jakarta.activation",
+              "module": "jakarta.activation-api"
+            },
+            {
+              "group": "commons-logging",
+              "module": "commons-logging"
+            },
+            {
+              "group": "com.zaxxer",
+              "module": "HikariCP-java6"
+            }
+          ]
+        },
+        {
+          "group": "jaxen",
+          "module": "jaxen",
+          "version": {
+            "requires": "1.1.6"
+          },
+          "excludes": [
+            {
+              "group": "org.apache.tomcat",
+              "module": "tomcat-annotations-api"
+            },
+            {
+              "group": "jakarta.activation",
+              "module": "jakarta.activation-api"
+            },
+            {
+              "group": "commons-logging",
+              "module": "commons-logging"
+            },
+            {
+              "group": "com.zaxxer",
+              "module": "HikariCP-java6"
+            }
+          ]
+        },
+        {
+          "group": "org.jdom",
+          "module": "jdom",
+          "version": {
+            "requires": "1.1"
+          },
+          "excludes": [
+            {
+              "group": "org.apache.tomcat",
+              "module": "tomcat-annotations-api"
+            },
+            {
+              "group": "jakarta.activation",
+              "module": "jakarta.activation-api"
+            },
+            {
+              "group": "commons-logging",
+              "module": "commons-logging"
+            },
+            {
+              "group": "com.zaxxer",
+              "module": "HikariCP-java6"
+            }
+          ]
+        },
+        {
+          "group": "edu.kit.ocrd",
+          "module": "ocrd-workspace",
+          "version": {
+            "requires": "0.2.0"
+          },
+          "excludes": [
+            {
+              "group": "org.apache.tomcat",
+              "module": "tomcat-annotations-api"
+            },
+            {
+              "group": "jakarta.activation",
+              "module": "jakarta.activation-api"
+            },
+            {
+              "group": "commons-logging",
+              "module": "commons-logging"
+            },
+            {
+              "group": "com.zaxxer",
+              "module": "HikariCP-java6"
+            }
+          ]
+        },
+        {
+          "group": "edu.kit.ocrd",
+          "module": "bagging",
+          "version": {
+            "requires": "0.2.0"
+          },
+          "excludes": [
+            {
+              "group": "org.apache.tomcat",
+              "module": "tomcat-annotations-api"
+            },
+            {
+              "group": "jakarta.activation",
+              "module": "jakarta.activation-api"
+            },
+            {
+              "group": "commons-logging",
+              "module": "commons-logging"
+            },
+            {
+              "group": "com.zaxxer",
+              "module": "HikariCP-java6"
+            }
+          ]
+        },
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter-web",
+          "excludes": [
+            {
+              "group": "org.apache.tomcat",
+              "module": "tomcat-annotations-api"
+            },
+            {
+              "group": "jakarta.activation",
+              "module": "jakarta.activation-api"
+            },
+            {
+              "group": "commons-logging",
+              "module": "commons-logging"
+            },
+            {
+              "group": "com.zaxxer",
+              "module": "HikariCP-java6"
+            }
+          ]
+        },
+        {
+          "group": "commons-io",
+          "module": "commons-io",
+          "version": {
+            "requires": "2.5"
+          },
+          "excludes": [
+            {
+              "group": "org.apache.tomcat",
+              "module": "tomcat-annotations-api"
+            },
+            {
+              "group": "jakarta.activation",
+              "module": "jakarta.activation-api"
+            },
+            {
+              "group": "commons-logging",
+              "module": "commons-logging"
+            },
+            {
+              "group": "com.zaxxer",
+              "module": "HikariCP-java6"
+            }
+          ]
+        },
+        {
+          "group": "com.arangodb",
+          "module": "arangodb-spring-data",
+          "version": {
+            "requires": "3.1.1"
+          },
+          "excludes": [
+            {
+              "group": "org.apache.tomcat",
+              "module": "tomcat-annotations-api"
+            },
+            {
+              "group": "jakarta.activation",
+              "module": "jakarta.activation-api"
+            },
+            {
+              "group": "commons-logging",
+              "module": "commons-logging"
+            },
+            {
+              "group": "com.zaxxer",
+              "module": "HikariCP-java6"
+            }
+          ]
+        },
+        {
+          "group": "org.slf4j",
+          "module": "slf4j-api",
+          "version": {
+            "requires": "1.7.25"
+          },
+          "excludes": [
+            {
+              "group": "org.apache.tomcat",
+              "module": "tomcat-annotations-api"
+            },
+            {
+              "group": "jakarta.activation",
+              "module": "jakarta.activation-api"
+            },
+            {
+              "group": "commons-logging",
+              "module": "commons-logging"
+            },
+            {
+              "group": "com.zaxxer",
+              "module": "HikariCP-java6"
+            }
+          ]
+        },
+        {
+          "group": "ch.qos.logback",
+          "module": "logback-classic",
+          "version": {
+            "requires": "1.2.3"
+          },
+          "excludes": [
+            {
+              "group": "org.apache.tomcat",
+              "module": "tomcat-annotations-api"
+            },
+            {
+              "group": "jakarta.activation",
+              "module": "jakarta.activation-api"
+            },
+            {
+              "group": "commons-logging",
+              "module": "commons-logging"
+            },
+            {
+              "group": "com.zaxxer",
+              "module": "HikariCP-java6"
+            }
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "ocrd-metadata-0.4.0.jar",
+          "url": "ocrd-metadata-0.4.0.jar",
+          "size": 48661,
+          "sha512": "99547088ed785d772dd1de583e9f770ec7a2f6aa6d6132b622642721f3311b26e16f341810d56e625426061d1ddae00c23dd5cd3e3f188984ed7c28ed82341b2",
+          "sha256": "c816dad377d78eda6f725c4aade9bc892b73ebee8b4e9e9c882b325c94b730da",
+          "sha1": "94e9eb58ca04ad1588325e5698f5bef746268114",
+          "md5": "b65bf47637578ca17a4db4dc01977aab"
+        }
+      ]
+    }
+  ]
+}

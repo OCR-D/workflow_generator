@@ -1,0 +1,91 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "edu.kit.ocrd",
+    "module": "ocrd-workspace",
+    "version": "0.2.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.0.1",
+      "buildId": "wioslxu5qbg47emd5etl36yzjq"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "ocrd-workspace-0.2.0.jar",
+          "url": "ocrd-workspace-0.2.0.jar",
+          "size": 94403,
+          "sha512": "5fab386cbdd0c347e4932461a032d7f01aba89935a6a39a301a2965eb64bdc3b4c69ac77abc89f703407ff9e88c4d7cada9fa6c653175958ea6ed82e385bfcca",
+          "sha256": "1bb050e1311f1825a7ac61b3a3c70376535a65bec19627bcc808d5d5a1af6505",
+          "sha1": "1c4e2634425ece97b5a5cebfdbd869917e8cd568",
+          "md5": "971441a6fd8ecb3b2e675a816be91519"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.fzk.ipe",
+          "module": "Tools",
+          "version": {
+            "requires": "1.6"
+          }
+        },
+        {
+          "group": "jaxen",
+          "module": "jaxen",
+          "version": {
+            "requires": "1.1.6"
+          }
+        },
+        {
+          "group": "org.jdom",
+          "module": "jdom",
+          "version": {
+            "requires": "1.1"
+          }
+        },
+        {
+          "group": "org.apache.tika",
+          "module": "tika-parsers",
+          "version": {
+            "requires": "1.22"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "ocrd-workspace-0.2.0.jar",
+          "url": "ocrd-workspace-0.2.0.jar",
+          "size": 94403,
+          "sha512": "5fab386cbdd0c347e4932461a032d7f01aba89935a6a39a301a2965eb64bdc3b4c69ac77abc89f703407ff9e88c4d7cada9fa6c653175958ea6ed82e385bfcca",
+          "sha256": "1bb050e1311f1825a7ac61b3a3c70376535a65bec19627bcc808d5d5a1af6505",
+          "sha1": "1c4e2634425ece97b5a5cebfdbd869917e8cd568",
+          "md5": "971441a6fd8ecb3b2e675a816be91519"
+        }
+      ]
+    }
+  ]
+}
