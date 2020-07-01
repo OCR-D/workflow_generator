@@ -32,6 +32,7 @@ ocrd-olena-binarize      | OCR-D-IMG | TEST-PAGE-BIN,TEST-IMG-PAGE-BIN | | {\"im
 #ocrd-olena-binarize      | OCR-D-IMG | TEST-PAGE-BIN,TEST-IMG-PAGE-BIN | | {\"impl\":\"niblack\"} | ERROR
 #ocrd-olena-binarize      | OCR-D-IMG | TEST-PAGE-BIN,TEST-IMG-PAGE-BIN | | {\"impl\":\"singh\"} | ERROR
 #ocrd-olena-binarize      | OCR-D-IMG | TEST-PAGE-BIN,TEST-IMG-PAGE-BIN | | {\"impl\":\"otsu\"} | ERROR
+#ocrd-dummy               | OCR-D-IMG | TEST-PAGE-BIN                   | | | ERROR
 ########################################################################
 # STEP  2  Cropping
 ########################################################################
@@ -61,45 +62,41 @@ ocrd-olena-binarize      | TEST-PAGE-CROP | TEST-PAGE-BIN2,TEST-IMG-PAGE-BIN2 | 
 #ocrd-olena-binarize      | TEST-PAGE-CROP | TEST-PAGE-BIN2,TEST-IMG-PAGE-BIN2 | | {\"impl\":\"niblack\"} | ERROR
 #ocrd-olena-binarize      | TEST-PAGE-CROP | TEST-PAGE-BIN2,TEST-IMG-PAGE-BIN2 | | {\"impl\":\"singh\"} | ERROR
 #ocrd-olena-binarize      | TEST-PAGE-CROP | TEST-PAGE-BIN2,TEST-IMG-PAGE-BIN2 | | {\"impl\":\"otsu\"} | ERROR
-
-# alternatively without binarization
-# ocrd-cis-ocropy-denoise   | TEST-PAGE-CROP     | TEST-PAGE-DENOISE,TEST-IMG-PAGE-DENOISE |  | {\"level-of-operation\":\"page\"}  | ERROR
+#ocrd-dummy               | TEST-PAGE-CROP | TEST-PAGE-BIN2 | | | ERROR
 #######################################################################
-# STEP  4  Denoising (in case of additional binarization step before)
+# STEP  4  Denoising 
 ########################################################################
+ocrd-cis-ocropy-denoise   | TEST-PAGE-BIN2     | TEST-PAGE-DENOISE,TEST-IMG-PAGE-DENOISE | | {\"level-of-operation\":\"page\"}  | ERROR
+
 # alternatively
-ocrd-cis-ocropy-denoise   | TEST-PAGE-BIN2     | TEST-PAGE-DENOISE,TEST-IMG-PAGE-DENOISE |  | {\"level-of-operation\":\"page\"}  | ERROR
+#ocrd-dummy               | TEST-PAGE-BIN2     | TEST-PAGE-DENOISE | | | ERROR
 ########################################################################
 # STEP  5  Deskewing
 ########################################################################
 # recommended
 ocrd-cis-ocropy-deskew  | TEST-PAGE-DENOISE     | TEST-PAGE-DESKEW,TEST-IMG-PAGE-DESKEW | | {\"level-of-operation\":\"page\"} | ERROR
 # alternatively
+
 #ocrd-anybaseocr-deskew | TEST-PAGE-DENOISE     | TEST-PAGE-DESKEW,TEST-IMG-PAGE-DESKEW | | {\"operation_level\":\"page\"} | ERROR
 #ocrd-tesserocr-deskew  | TEST-PAGE-DENOISE     | TEST-PAGE-DESKEW,TEST-IMG-PAGE-DESKEW | | {\"operation_level\":\"page\"} | ERROR
+#ocrd-dummy             | TEST-PAGE-DENOISE     | TEST-PAGE-DESKEW | | | ERROR
 ########################################################################
 # STEP  6/7  Dewarping (GPU needed!) or page segmentation
 ########################################################################
-# not recommended (for heavily warped documents only)
-#ocrd-anybaseocr-dewarp  |TEST-PAGE-DESKEW  | TEST-PAGE-DEWARP,TEST-IMG-PAGE-DEWARP | |{\"model_name\":\"/home/hartmann-v/ocrd/taverna/python/pix2pixHD/models\",\"pix2pixHD\":\"/home/hartmann-v/ocrd/taverna/python/pix2pixHD/\"} | ERROR
-
-# recommended (both processors)
-ocrd-tesserocr-segment-region       | TEST-PAGE-DESKEW       | TEST-SEG-REGION-TESS | | | ERROR
-ocrd-segment-repair            | TEST-SEG-REGION-TESS | TEST-SEG-REGION |  | {\"plausibilize\":true}  |  ERROR
-
-# alternatively
-#ocrd-cis-ocropy-segment            | TEST-PAGE-DESKEW       | TEST-SEG-REGION | | {\"level-of-operation\":\"page\"}  |  ERROR
-#ocrd-pc-segmentation               | TEST-PAGE-DENOISE       | TEST-SEG-REGION | | {\"model\":\"/home/hartmann-v/ocrd/taverna/models/jmu-wuerzburg/model.h5\"}  |  ERROR
+ocrd-dummy               | TEST-PAGE-DESKEW  | TEST-PAGE-DEWARP | | | ERROR
+# alternatively (recommended for heavily warped documents only)
+#ocrd-anybaseocr-dewarp  |TEST-PAGE-DESKEW  | TEST-PAGE-DEWARP,TEST-IMG-PAGE-DEWARP | |{\"model_name\":\"${TAVERNA_INSTALL_DIR}/python/pix2pixHD/models\",\"pix2pixHD\":\"${TAVERNA_INSTALL_DIR}/python/pix2pixHD/\"} | ERROR
 ########################################################################
 # STEP  7  Page segmentation (in case of dewarp step before)
 ########################################################################
 # only recommended if dewarp is neccessary (both processors)
-#ocrd-tesserocr-segment-region      | TEST-PAGE-DEWARP       | TEST-SEG-REGION-TESS | | | ERROR
-#ocrd-segment-repair            | TEST-SEG-REGION-TESS | TEST-SEG-REGION |  | {\"plausibilize\":true}  |  ERROR
+ocrd-tesserocr-segment-region      | TEST-PAGE-DEWARP       | TEST-SEG-REGION-TESS | | | ERROR
+ocrd-segment-repair            | TEST-SEG-REGION-TESS | TEST-SEG-REGION |  | {\"plausibilize\":true}  |  ERROR
 
 # alternatively
 #ocrd-cis-ocropy-segment            | TEST-PAGE-DEWARP       | TEST-SEG-REGION | | {\"level-of-operation\":\"page\"}  |  ERROR
-#ocrd-pc-segmentation               | TEST-PAGE-DEWARP       | TEST-SEG-REGION | | {\"model\":\"/home/hartmann-v/ocrd/taverna/models/jmu-wuerzburg/model.h5\"}  |  ERROR
+#ocrd-pc-segmentation               | TEST-PAGE-DEWARP       | TEST-SEG-REGION | | {\"model\":\"${TAVERNA_INSTALL_DIR}/models/jmu-wuerzburg/model.h5\"}  |  ERROR
+#ocrd-dummy                         | TEST-PAGE-DEWARP       | TEST-SEG-REGION | | | ERROR
 ########################################################################
 ########################################################################
 #          ####    ####    ###    ###    ###    #   #  
@@ -130,6 +127,7 @@ ocrd-olena-binarize      | TEST-SEG-REGION | TEST-SEG-REGION-BIN,TEST-IMG-SEG-RE
 #ocrd-olena-binarize      | TEST-SEG-REGION | TEST-SEG-REGION-BIN,TEST-IMG-SEG-REGION-BIN | | {\"impl\":\"niblack\"} | ERROR
 #ocrd-olena-binarize      | TEST-SEG-REGION | TEST-SEG-REGION-BIN,TEST-IMG-SEG-REGION-BIN | | {\"impl\":\"singh\"} | ERROR
 #ocrd-olena-binarize      | TEST-SEG-REGION | TEST-SEG-REGION-BIN,TEST-IMG-SEG-REGION-BIN | | {\"impl\":\"otsu\"} | ERROR
+#ocrd-dummy               | TEST-SEG-REGION | TEST-SEG-REGION-BIN | | | ERROR
 ########################################################################
 # STEP  9  Deskewing
 ########################################################################
@@ -138,8 +136,7 @@ ocrd-cis-ocropy-deskew |TEST-SEG-REGION-BIN    |TEST-SEG-REGION-DESKEW,TEST-IMG-
 
 # alternatively
 # no alternative available yet 
-# without additional binarization
-#ocrd-cis-ocropy-deskew |TEST-SEG-REGION        |TEST-SEG-REGION-DESKEW,TEST-IMG-SEG-REGION-DESKEW | | {\"level-of-operation\":\"region\"} |ERROR
+#ocrd-dummy            |TEST-SEG-REGION-BIN    |TEST-SEG-REGION-DESKEW | | | ERROR
 ########################################################################
 # STEP  10  Clipping (optional) or line segmentation
 ########################################################################
@@ -147,16 +144,16 @@ ocrd-cis-ocropy-deskew |TEST-SEG-REGION-BIN    |TEST-SEG-REGION-DESKEW,TEST-IMG-
 ocrd-cis-ocropy-clip | TEST-SEG-REGION-DESKEW | TEST-SEG-REGION-CLIP,TEST-IMG-SEG-REGION-CLIP |  | {\"level-of-operation\":\"region\"}  |  ERROR
 
 # alternatively
-#ocrd-tesserocr-segment-line | TEST-SEG-REGION-DESKEW | TEST-SEG-LINE | | |ERROR
-#ocrd-cis-ocropy-segment     | TEST-SEG-REGION-DESKEW | TEST-SEG-LINE | | {\"level-of-operation\":\"region\"}  |  ERROR
+#ocrd-dummy           | TEST-SEG-REGION-DESKEW | TEST-SEG-REGION-CLIP | | | ERROR
 ########################################################################
-# STEP 11  Line segmentation (in case of clipping step in beforehand)
+# STEP 11  Line segmentation 
 ########################################################################
 # recommended
 ocrd-cis-ocropy-segment     | TEST-SEG-REGION-CLIP   | TEST-SEG-LINE | | {\"level-of-operation\":\"region\"}  |  ERROR
 
 # alternatively
 #ocrd-tesserocr-segment-line | TEST-SEG-REGION-CLIP   | TEST-SEG-LINE | | |ERROR
+#ocrd-dummy                  | TEST-SEG-REGION-CLIP | TEST-SEG-LINE | | | ERROR
 ########################################################################
 ########################################################################
 #                          #     ###  #   #  ####
@@ -174,6 +171,7 @@ ocrd-cis-ocropy-clip      | TEST-SEG-LINE | TEST-SEG-LINE-CLIP,TEST-SEG-LINE-CLI
 # alternatively
 #ocrd-cis-ocropy-resegment | TEST-SEG-LINE | TEST-SEG-LINE-CLIP,TEST-IMG-SEG-LINE-CLIP |  |   |  ERROR
 #ocrd-segment-repair       | TEST-SEG-LINE | TEST-SEG-LINE-CLIP |  | {\"sanitize\":true}  |  ERROR
+#ocrd-dummy                | TEST-SEG-LINE | TEST-SEG-LINE-CLIP | | | ERROR
 ########################################################################
 # STEP 11  Dewarping (on line level)
 ########################################################################
@@ -182,7 +180,8 @@ ocrd-cis-ocropy-dewarp  | TEST-SEG-LINE-CLIP | TEST-SEG-LINE-DEWARP,TEST-IMG-SEG
 
 # alternatively
 # no result produced
-#ocrd-anybaseocr-dewarp  | TEST-SEG-LINE      | TEST-SEG-LINE-DEWARP,TEST-IMG-SEG-LINE-DEWARP |  |{\"operation_level\":\"line\",\"model_name\":\"/home/hartmann-v/ocrd/taverna/python/pix2pixHD/models","pix2pixHD":"/home/hartmann-v/ocrd/taverna/python/pix2pixHD/"}   |  ERROR
+#ocrd-anybaseocr-dewarp  | TEST-SEG-LINE      | TEST-SEG-LINE-DEWARP,TEST-IMG-SEG-LINE-DEWARP |  |{\"operation_level\":\"line\",\"model_name\":\"${TAVERNA_INSTALL_DIR}/python/pix2pixHD/models","pix2pixHD":"${TAVERNA_INSTALL_DIR}/python/pix2pixHD/"}   |  ERROR
+#ocrd-dummy              | TEST-SEG-LINE      | TEST-SEG-LINE-DEWARP | | | ERROR
 ########################################################################
 ########################################################################
 #                           ###    ####  ###
@@ -198,11 +197,22 @@ ocrd-cis-ocropy-dewarp  | TEST-SEG-LINE-CLIP | TEST-SEG-LINE-DEWARP,TEST-IMG-SEG
 ocrd-tesserocr-recognize|TEST-SEG-LINE-DEWARP | TEST-OCR-TESS | | {\"textequiv_level\":\"glyph\",\"overwrite_words\":true,\"model\":\"GT4HistOCR_50000000.997_191951\"}     |ERROR
 # alternatively
 #ocrd-tesserocr-recognize|TEST-SEG-LINE-DEWARP | TEST-OCR-TESS | | {\"textequiv_level\":\"glyph\",\"overwrite_words\":true,\"model\":\"Fraktur\"}  |  ERROR
+#ocrd-dummy              |TEST-SEG-LINE-DEWARP | TEST-OCR-TESS | | | | ERROR
 ########################################################################
 # STEP 12b  Text recognition (calamari)
 ########################################################################
 # recommended
-#ocrd-calamari-recognize |TEST-SEG-LINE-DEWARP | TEST-OCR-CALA | | {\"checkpoint\":\"/home/hartmann-v/ocrd/taverna/models/calamari/GT4HistOCR/*.ckpt.json\"}  |  ERROR
+ocrd-calamari-recognize |TEST-SEG-LINE-DEWARP | TEST-OCR-CALA | | {\"checkpoint\":\"${TAVERNA_INSTALL_DIR}/models/calamari/GT4HistOCR/*.ckpt.json\"}  |  ERROR
+# alternatively
+#ocrd-dummy              |TEST-SEG-LINE-DEWARP | TEST-OCR-CALA | | | | ERROR
+
+########################################################################
+########################################################################
+# Following postprocessing steps 13,14 are optional. 
+# For evaluation step 15 is needed.
+########################################################################
+########################################################################
+
 ########################################################################
 # STEP 13  Align (optional)
 ########################################################################
@@ -212,12 +222,17 @@ ocrd-tesserocr-recognize|TEST-SEG-LINE-DEWARP | TEST-OCR-TESS | | {\"textequiv_l
 # STEP 14  Post correction (optional)
 ########################################################################
 # optional
-##ocrd-cor-asv-ann-process | TEST-OCR-TESS  | TEST-COR-ASV |  | {\"textequiv_level\":\"line\",\"model_file\":\"/home/hartmann-v/ocrd/taverna/models/cor-asv/gt4Hist.h5\"}  |  ERROR
-#ocrd-cor-asv-ann-process | TEST-OCR-CALA  | TEST-COR-ASV |  | {\"textequiv_level\":\"line\",\"model_file\":\"/home/hartmann-v/ocrd/taverna/models/cor-asv/gt4Hist.h5\"}  |  ERROR
-#ocrd-cor-asv-ann-process | TEST-OCR-ALIGN | TEST-COR-ASV |  | {\"textequiv_level\":\"line\",\"model_file\":\"/home/hartmann-v/ocrd/taverna/models/cor-asv/gt4Hist.h5\"}  |  ERROR
-#ocrd-cis-post-correct.sh | TEST-OCR-TESS  | TEST-COR-CIS |  | {\"textequiv_level\":\"line\",\"model_file\":\"/home/hartmann-v/ocrd/taverna/models/cor-asv/gt4Hist.h5\"}  |  ERROR
-#ocrd-cis-post-correct.sh | TEST-OCR-CALA  | TEST-COR-CIS |  | {\"textequiv_level\":\"line\",\"model_file\":\"/home/hartmann-v/ocrd/taverna/models/cor-asv/gt4Hist.h5\"}  |  ERROR
-#ocrd-cis-post-correct.sh | TEST-OCR-ALIGN | TEST-COR-CIS |  | {\"textequiv_level\":\"line\",\"model_file\":\"/home/hartmann-v/ocrd/taverna/models/cor-asv/gt4Hist.h5\"}  |  ERROR
+# Test if aligned data produces better results than postcorrection of 
+# single OCR.
+#ocrd-cor-asv-ann-process | TEST-OCR-TESS  | TEST-COR-ASV |  | {\"textequiv_level\":\"line\",\"model_file\":\"${TAVERNA_INSTALL_DIR}/models/cor-asv/gt4Hist.h5\"}  |  ERROR
+#ocrd-cor-asv-ann-process | TEST-OCR-CALA  | TEST-COR-ASV |  | {\"textequiv_level\":\"line\",\"model_file\":\"${TAVERNA_INSTALL_DIR}/models/cor-asv/gt4Hist.h5\"}  |  ERROR
+#ocrd-cor-asv-ann-process | TEST-OCR-ALIGN | TEST-COR-ASV |  | {\"textequiv_level\":\"line\",\"model_file\":\"${TAVERNA_INSTALL_DIR}/models/cor-asv/gt4Hist.h5\"}  |  ERROR
+
+# Test if aligned data produces better results than postcorrection of 
+# single OCR.
+#ocrd-cis-postcorrect      | TEST-OCR-TESS  | TEST-COR-CIS |  | {\"profilerPath\":\"${TAVERNA_INSTALL_DIR}/models/cis/bin/profiler.bash\",\"profilerConfig\":\"ignored\",\"nOCR\":1,\"model\":\"${TAVERNA_INSTALL_DIR}/models/cis/model.zip\"}  |  ERROR
+#ocrd-cis-postcorrect      | TEST-OCR-CALA  | TEST-COR-CIS |  | {\"profilerPath\":\"${TAVERNA_INSTALL_DIR}/models/cis/bin/profiler.bash\",\"profilerConfig\":\"ignored\",\"nOCR\":1,\"model\":\"${TAVERNA_INSTALL_DIR}/models/cis/model.zip\"}  |  ERROR
+#ocrd-cis-postcorrect      | TEST-OCR-ALIGN | TEST-COR-CIS |  | {\"profilerPath\":\"${TAVERNA_INSTALL_DIR}/models/cis/bin/profiler.bash\",\"profilerConfig\":\"ignored\",\"nOCR\":2,\"model\":\"${TAVERNA_INSTALL_DIR}/models/cis/model.zip\"}  |  ERROR
 ########################################################################
 ########################################################################
 #              ##   #  #   ##   #    #   #  #####  ####
@@ -227,16 +242,18 @@ ocrd-tesserocr-recognize|TEST-SEG-LINE-DEWARP | TEST-OCR-TESS | | {\"textequiv_l
 #             #  #  #  #  #  #  ###    #    #####  ####
 ########################################################################
 ########################################################################
-# STEP 15  Analyze (optional and only if GT available)
+# STEP 15  Analyze (optional and only if GT is available)
 ########################################################################
-# optional
+# optional (Please check for correct groupID of GT)
 ocrd-dinglehopper | TEST-OCR-TESS,OCR-D-GT-SEG-BLOCK | TEST-OCR-EVAL| | | 
-#ocrd-dinglehopper | TEST-OCR-TESS,OCR-D-GT-SEG-PAGE  | TEST-OCR-EVAL| | | 
-#ocrd-dinglehopper | TEST-OCR-CALA,OCR-D-GT-SEG-BLOCK | TEST-OCR-EVAL| | | 
-#ocrd-dinglehopper | TEST-OCR-CALA,OCR-D-GT-SEG-PAGE  | TEST-OCR-EVAL| | | 
+ocrd-dinglehopper | TEST-OCR-CALA,OCR-D-GT-SEG-BLOCK | TEST-OCR-EVAL| | | 
 #ocrd-dinglehopper | TEST-COR-ASV,OCR-D-GT-SEG-BLOCK  | TEST-OCR-EVAL| | | 
-#ocrd-dinglehopper | TEST-COR-ASV,OCR-D-GT-SEG-PAGE   | TEST-OCR-EVAL| | | 
 #ocrd-dinglehopper | TEST-COR-CIS,OCR-D-GT-SEG-BLOCK  | TEST-OCR-EVAL| | | 
+
+# GT in groupID OCR-D-GT-SEG-PAGE
+#ocrd-dinglehopper | TEST-OCR-TESS,OCR-D-GT-SEG-PAGE  | TEST-OCR-EVAL| | | 
+#ocrd-dinglehopper | TEST-OCR-CALA,OCR-D-GT-SEG-PAGE  | TEST-OCR-EVAL| | | 
+#ocrd-dinglehopper | TEST-COR-ASV,OCR-D-GT-SEG-PAGE   | TEST-OCR-EVAL| | | 
 #ocrd-dinglehopper | TEST-OCR-CIS,OCR-D-GT-SEG-PAGE   | TEST-OCR-EVAL| | | 
 
 
