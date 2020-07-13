@@ -44,7 +44,7 @@ public class WorkflowTool {
    * @param args the command line arguments
    */
   public static void main(String[] args) {
-    args = new String[]{"evalGT", "/media/hartmann-v/0C421C250C421C25/OCR-D/eval", "/tmp/testEval/eval.csv"};
+
     if (args.length == 0) {
       printUsage("Missing parameters!");
       System.exit(1);
