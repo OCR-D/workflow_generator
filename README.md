@@ -58,8 +58,11 @@ This parameter depends on hardware and size of the manuscript.
 If there are more processing steps than allowed per file it creaes multiple files with
 an index at the end.
 ### Task 'eval'
-Collect all json files created by 'dinglehopper' and compiles a csv file with all relevant values.
-This csv file can be analyzed by pivot tables.
+Evaluation of different workflows. It collects all json files created by 'dinglehopper' and the provenance file(s) to compile a csv file
+with all relevant values. This csv file can be analyzed by pivot tables.
+### Task 'evalGT'
+Evaluation of same workflow on different manuscripts. It collects all json files created by 'dinglehopper' and compile a csv file 
+with statistics of all manuscripts. This csv file can be analyzed by pivot tables.
 ### Task 'listProv'
 Analzye the provenance file created by taverna workflow. It prints all processors with
 their input file group and their created output file groups. If no output file groups
