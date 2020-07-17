@@ -80,11 +80,7 @@ If the workflow step should be skipped activate the dummy processor ('ocrd_dummy
 directory of taverna. (e.g.: /home/user/ocrd/taverna)
 
 ## Testing processors
-
-
-
-
-
+See scripts and helper files in 'tools' directory.
 
 ## More Information
 
