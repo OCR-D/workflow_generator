@@ -22,6 +22,6 @@
 ########################################################################
 METS:file:///tmp/any/path/mets.xml
 WORKING_DIR:/tmp/any/path
-WORKFLOW_CONFIG_FILE:file://${TAVERNA_INST_DIR}/conf/workflow_configuration4permutation.txt
+WORKFLOW_CONFIG_FILE:file://${TAVERNA_INST_DIR}/conf/workflow_configuration4evaluation.txt
 PREFIX_PROV:prov
 

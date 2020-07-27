@@ -42,16 +42,22 @@ do
 	echo $file
         cp $file conf/workflow_configuration4permutation.txt
         mv $file permutations/done_$ACTUAL_TIME 
+
         # Start workflow
         bash startWorkflow.sh parameters_permutation.txt $WORKSPACE_DIRECTORY
+
         # Move result to resultDir
         END_TIME=`date +%Y_%m_%d_%H%M%S`
         mv $WORKSPACE_DIRECTORY "$RESULT_DIRECTORY/$ACTUAL_TIME/eval_$END_TIME"
+
         # Clean up workspace to reduce memory.
         bash cleanUpWorkspace.sh "$RESULT_DIRECTORY/$ACTUAL_TIME/eval_$END_TIME"
-        cp -r "$RESULT_DIRECTORY/$ACTUAL_TIME/orig" $WORKSPACE_DIRECTORY
+
         # Clean up temp directory
         rm -rf /tmp/ocrd-bagit*
+
+        # Restore initial workspace
+        cp -r "$RESULT_DIRECTORY/$ACTUAL_TIME/orig" $WORKSPACE_DIRECTORY
 done
 
 
