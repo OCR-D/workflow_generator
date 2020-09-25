@@ -44,7 +44,8 @@ public class WorkflowTool {
    * @param args the command line arguments
    */
   public static void main(String[] args) {
-
+    args = new String[]{"permutate","/home/hartmann-v/workflow_configuration_all.txt", "/tmp/workflow_configuration_permutation.txt","200"};
+    args = new String[]{"eval","/media/hartmann-v/0C421C250C421C251/neu/2020_09_25_1250/", "/media/hartmann-v/0C421C250C421C251/neu/2020_09_25_1250/evaluation_step1.csv"};
     if (args.length == 0) {
       printUsage("Missing parameters!");
       System.exit(1);
@@ -627,10 +628,10 @@ public class WorkflowTool {
       String[] ocr = ((String) jsonObject.get("ocr")).split("/");
       String evalGrp = ocr[0];
       String gtFilename = gt[1];
-//      if (gt[0].split("_").length > 1) {
+      if (!gt[0].contains("-GT-SEG-")) {
       evalGrp = gt[0];
       gtFilename = ocr[1];
-//      }
+      }
       eval = new Evaluation();
       eval.setCer(characterErrorRate);
       eval.setWer(wordErrorRate);
