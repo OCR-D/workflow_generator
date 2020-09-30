@@ -627,10 +627,10 @@ public class WorkflowTool {
       String[] ocr = ((String) jsonObject.get("ocr")).split("/");
       String evalGrp = ocr[0];
       String gtFilename = gt[1];
-//      if (gt[0].split("_").length > 1) {
+      if (!gt[0].contains("-GT-SEG-")) {
       evalGrp = gt[0];
       gtFilename = ocr[1];
-//      }
+      }
       eval = new Evaluation();
       eval.setCer(characterErrorRate);
       eval.setWer(wordErrorRate);

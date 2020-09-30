@@ -6,7 +6,10 @@ Do permutation and evaluation of all/chosen processors
     > cd ${TAVERNA_INST_DIR}
     > mkdir permutations
 1. Copy all created workflow configuration files (workflow_configuration_permutation_????.txt ) in the permutations folder
-    > cp workflow_configuration*.txt ${TAVERNA_INST_DIR}/permutations
+    > cp workflow_configuration.txt* ${TAVERNA_INST_DIR}/permutations
+1.b Change sequence of ouput groups for dinglehopper
+    > sed -i "s/,OCR-D-GT-SEG-BLOCK//g" permutations/workflow_configuration*
+    > sed -i "s/pper | OCR-D/pper | OCR-D-GT-SEG-BLOCK,OCR-D/g" permutations/workflow_configuration*
 2. Start evaluation
     > bash runPermutations.sh /path/to/workspace /path/to/resultdir
 3. Create evaluation file
